@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { Accounts, Program, Wallet, web3 } from '@project-serum/anchor';
 import { MintLayout, TOKEN_PROGRAM_ID, Token } from '@solana/spl-token';
@@ -33,12 +34,16 @@ export type CandyMachineState = {
 
 type CandyHook = {
   (walletAddress: Wallet): {
+    isMinting: boolean;
     mintToken: () => Promise<void>;
+    fetchHashTable: (hash: string, metadataEnabled: boolean) => Promise<(string | MetadataData)[]>;
     getCandyMachineState: () => Promise<CandyMachineState | null>;
   };
 };
 
 export const useCandyMachine: CandyHook = (walletAddress) => {
+  const [isMinting, setIsMinting] = useState(false);
+
   const fetchHashTable = async (hash: string, metadataEnabled: boolean): Promise<(string | MetadataData)[]> => {
     const connection = new web3.Connection(process.env.NEXT_PUBLIC_SOLANA_RPC_HOST || '');
 
@@ -110,6 +115,7 @@ export const useCandyMachine: CandyHook = (walletAddress) => {
 
   const mintToken = async (): Promise<void> => {
     try {
+      setIsMinting(true);
       const mint = web3.Keypair.generate();
       const token = await getTokenWallet(walletAddress.publicKey, mint.publicKey);
       const metadata = await getMetadata(mint.publicKey);
@@ -168,7 +174,7 @@ export const useCandyMachine: CandyHook = (walletAddress) => {
       }
       const program = new Program(idl, candyMachineProgram, provider);
 
-      console.log('txn1:');
+      console.log('txn1:', accounts);
 
       const txn = await program.rpc.mintNft({
         accounts,
@@ -188,6 +194,7 @@ export const useCandyMachine: CandyHook = (walletAddress) => {
             const { result } = notification;
             if (!result.err) {
               console.log('NFT Minted!');
+              setIsMinting(false);
             }
           }
         },
@@ -197,9 +204,9 @@ export const useCandyMachine: CandyHook = (walletAddress) => {
       // eslint-disable-next-line
       const error = err as any;
 
-      console.log('errr', error.stack);
+      let message = error.msg || error.message || 'Minting failed! Please try again!';
 
-      let message = error.msg || 'Minting failed! Please try again!';
+      setIsMinting(false);
 
       if (!error.msg) {
         if (error.message.indexOf('0x138')) {
@@ -295,7 +302,9 @@ export const useCandyMachine: CandyHook = (walletAddress) => {
   };
 
   return {
+    isMinting,
     mintToken,
+    fetchHashTable,
     getCandyMachineState,
   };
 };
