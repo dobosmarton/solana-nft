@@ -97,16 +97,24 @@ export const CandyMachine: React.FunctionComponent<Props> = ({ walletAddress }) 
       )}
 
       {isLoadingMints && <p>LOADING MINTS...</p>}
-      {mints.length > 0 && (
-        <div className="gif-container">
-          <p className="sub-text">Minted Items ✨</p>
-          <div className="gif-grid">
+      {machineStats && machineStats.itemsRedeemed > 0 && (
+        <div className="flex flex-col items-center">
+          <p className="text-xl font-bold my-4">Minted Items ✨</p>
+          <ul
+            role="list"
+            className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
             {mints.map((mint) => (
-              <div className="gif-item" key={mint}>
-                <img src={mint} alt={`Minted NFT ${mint}`} />
-              </div>
+              <li key={mint} className="relative">
+                <div className="group block w-full aspect-w-10 aspect-h-7 rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-offset-gray-100 focus-within:ring-indigo-500 overflow-hidden">
+                  <img
+                    src={mint}
+                    alt={`Minted NFT ${mint}`}
+                    className="object-cover pointer-events-none group-hover:opacity-75"
+                  />
+                </div>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       )}
     </div>

@@ -1,13 +1,13 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { useWallet } from '../src/hooks/useWallet';
+import { usePhantom } from '@dobosmarton/phantom-hook';
 import { ConnectWallet } from '../src/components/buttons/connectWallet';
 import { Footer } from '../src/components/footer/footer';
 import { CandyMachine } from '../src/components/candyMachine/candyMachine';
 import { ExtendedWindow } from '../src/services/solana';
 
 const Home: NextPage = () => {
-  const { walletAddress, connectWallet } = useWallet();
+  const { walletAddress, connectWallet } = usePhantom();
 
   return (
     <>

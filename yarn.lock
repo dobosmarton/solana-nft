@@ -84,6 +84,11 @@
   dependencies:
     "@cspotcode/source-map-consumer" "0.8.0"
 
+"@dobosmarton/phantom-hook@^0.1.5":
+  version "0.1.5"
+  resolved "https://npm.pkg.github.com/download/@dobosmarton/phantom-hook/0.1.5/3375d01485b1c2e6050aba070ce384d3e37cbc7a842defa6c0097875fc2c9832#ce77d0f78a31cf44e4d224ba8bd2e3010a37bb45"
+  integrity sha512-KhtKtj18ksFYIszDIcwBlVXyIKWaLRT3uef64Kne5fGRsnzTtJjOMJ+dbFSUbcHBCJgxIRPfD6+vGV9JKaA0cw==
+
 "@eslint/eslintrc@^0.4.3":
   version "0.4.3"
   resolved "https://registry.yarnpkg.com/@eslint/eslintrc/-/eslintrc-0.4.3.tgz#9e42981ef035beb3dd49add17acb96e8ff6f394c"
